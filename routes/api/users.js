@@ -5,7 +5,7 @@ const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
 
@@ -14,14 +14,16 @@ const User = require('../../models/User');
 // @access  Public
 router.post('/', // make a post request to the db
   [ // ensure there is a name, email, and password
+    // check for a name, err msg: name required; rule is for name to not be empty
     check('name', 'Name is required').not().isEmpty(),
-    check('email', 'Please enter a valid email').isEmail(),
+    check('email', 'Please enter a valid email').isEmail(), // ensures formatted as email address
     check('password', 'Please enter a password with 10 or more characters').isLength({ min: 10 }),
   ],
   async (req, res) => { // request and response
     const errors = validationResult(req);
     // if the errors field is not empty (contains errors) in the validation result
     if (!errors.isEmpty()) {
+      // return a response of bad request (code 400) and show all the errors
       return res.status(400).json({ errors: errors.array() });
     }
 
