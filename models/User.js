@@ -1,3 +1,6 @@
+// This user model defines what information will be held for each user
+// They have a name, email, password, avatar, and the date they created the profile
+
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
